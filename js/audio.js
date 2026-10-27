@@ -24,20 +24,16 @@ reverbs.set("1", reverb_1);
 reverbs.set("2", reverb_2);
 reverbs.set("3", reverb_3);
 
-// update devices (inputs and outputs)
+// update input devices
 async function refreshDevices() {
     devices = await navigator.mediaDevices.enumerateDevices();
     devices.forEach((device) => console.log(`kind = ${device.kind} label = ${device.label} deviceId = ${device.deviceId} groupId = ${device.groupId}`));
-    // add to input & output select
+    // add to input select
     input_select = document.getElementById("input-select");
     clearOptions(input_select);
-    output_select = document.getElementById("output-select");
-    clearOptions(output_select);
     devices.forEach((device) => {
         if (device.kind =="audioinput") {
             addOption(input_select, device.deviceId, device.label);
-        } else if (device.kind =="audiooutput") {
-            addOption(output_select, device.deviceId, device.label);
         }
     });
 }
