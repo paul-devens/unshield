@@ -1,7 +1,7 @@
 // initialize map, set coordinates and zoom level
 var map = L.map('map', {
-    center: [54.82893, 25.35116],
-    zoom: 16
+    center: [54.826658, 25.355635],
+    zoom: 17
 });
 // add tile layer
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -74,42 +74,18 @@ function error(error) {
     document.getElementById("geo-text").innerHTML = error.code.toString() + " : " + error.message;
 }
 
-// add marker
-//var marker = L.marker([60.196926, 24.966691]).addTo(map);
-// add circles
-var circle1 = L.circle([60.196802, 24.967040]).addTo(map);
-var circle2 = L.circle([60.196897, 24.967420], {
-    color: 'yellow',
-    fillColor: 'black',
-    fillOpacity: 0.4,
-    radius: 4
-}).addTo(map);
-// add polygon
-var polygon1 = L.polygon([
-    [60.196732, 24.967318],
-    [60.196810, 24.967619],
-    [60.196650, 24.967686],
-    [60.196668, 24.967325]
-]).addTo(map);
-var polygon2 = L.polygon([
-    [60.196556, 24.966981],
-    [60.196650, 24.966871],
-    [60.196558, 24.967233]
-    ], {
-    color: 'white',
-    fillOpacity: 0.8
-}).addTo(map);
-// add popups
-//marker.bindPopup("marker").openPopup();
-//marker.bindPopup("marker");
-circle1.bindPopup("circle1");
-circle2.bindPopup("circle2");
-polygon1.bindPopup("polygon1");
-polygon2.bindPopup("polygon2");
-// var standalonePopup = L.popup()
-//     .setLatLng([60.197021, 24.967640])
-//     .setContent("standalone popup")
-//     .openOn(map);
+function addMapPoint(lat, lon, rad) {
+    var point = L.circle([lat, lon], {
+        color: 'white',
+        fillOpacity: 0.8,
+        radius: rad
+    }).addTo(map);
+    return point;
+}
+
+var point1 = addMapPoint(54.826389, 25.355278, 5);
+var point2 = addMapPoint(54.826944, 25.355278, 5);
+var point3 = addMapPoint(54.826667, 25.356111, 5);
 
 // print coordinates on click
 var popup = L.popup();
@@ -118,6 +94,5 @@ function onMapClick(e) { // e = event object
         .setLatLng(e.latlng)
         .setContent(String(e.latlng))
         .openOn(map);
-    //alert("click coordinates: " + e.latlng);
 }
 map.on('click', onMapClick);
