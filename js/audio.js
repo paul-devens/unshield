@@ -103,6 +103,8 @@ async function startListening() {
         appendInfo("listening enabled");
         document.getElementById("audio-disable").disabled = false; // enable stop button
         document.getElementById("audio-enable").disabled = true; // disable start button
+        // log stream settings to console
+        console.log(stream.getAudioTracks()[0].getSettings());
     } catch (error) {
         appendInfo(error);
     }
