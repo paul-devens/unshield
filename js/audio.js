@@ -1,28 +1,37 @@
-let audioContext = new AudioContext(); // audio context variable
+let audioContext = null; // audio context variable
 let current_reverb = null; // currently selected reverb
 let stream = null; // user media audio stream
 let source = null; // audio source variable
 let input_id = null; // selected input deviceId
 let output_id = null; // selected output deviceId
-
-// create reverb nodes
-let reverb_1 = audioContext.createConvolver();
-let reverb_2 = audioContext.createConvolver();
-let reverb_3 = audioContext.createConvolver();
-// load impulse responses
-loadReverb(reverb_1, "./res/audio/ir-blockhaus-stereo.wav");
-loadReverb(reverb_2, "./res/audio/ir-coupole-stereo.wav");
-loadReverb(reverb_3, "./res/audio/ir-wiederstandsnest-stereo.wav");
-// connect to output
-reverb_1.connect(audioContext.destination);
-reverb_2.connect(audioContext.destination);
-reverb_3.connect(audioContext.destination);
-// map to IDs
+let reverb_1 = null;
+let reverb_2 = null;
+let reverb_3 = null;
 const reverbs = new Map();
-reverbs.set("0", null);
-reverbs.set("1", reverb_1);
-reverbs.set("2", reverb_2);
-reverbs.set("3", reverb_3);
+
+// create audio context and reverbs
+async function initAudio() {
+    // create audio context
+    audioContext = new AudioContext();
+    await audioContext.resume();
+    // create reverb nodes
+    reverb_1 = audioContext.createConvolver();
+    reverb_2 = audioContext.createConvolver();
+    reverb_3 = audioContext.createConvolver();
+    // load impulse responses
+    loadReverb(reverb_1, "./res/audio/ir-blockhaus-stereo.wav");
+    loadReverb(reverb_2, "./res/audio/ir-coupole-stereo.wav");
+    loadReverb(reverb_3, "./res/audio/ir-wiederstandsnest-stereo.wav");
+    // connect to output
+    reverb_1.connect(audioContext.destination);
+    reverb_2.connect(audioContext.destination);
+    reverb_3.connect(audioContext.destination);
+    // map to IDs
+    reverbs.set("0", null);
+    reverbs.set("1", reverb_1);
+    reverbs.set("2", reverb_2);
+    reverbs.set("3", reverb_3);
+}
 
 // update input devices
 async function refreshDevices() {
@@ -58,19 +67,21 @@ async function inputChanged() {
     }
 }
 
-function outputChanged() {
-    output_id = document.getElementById("output-select").value;
-    console.log(`selected output_id: ${output_id}`);
-}
-
 // start listening to user's microphone
 async function startListening() {
     try {
+        if (audioContext == null) {
+            initAudio();
+        }
         // get user device audio (default input or inputId)
         if (input_id == null) {
             stream = await navigator.mediaDevices.getUserMedia({audio: true});
         } else {
-            stream = await navigator.mediaDevices.getUserMedia({audio: {deviceId: {exact: input_id}}});
+            stream = await navigator.mediaDevices.getUserMedia({
+                audio: {
+                    deviceId: {exact: input_id}
+                }
+            });
         }
         // set device audio as audio context's source
         source = audioContext.createMediaStreamSource(stream);
