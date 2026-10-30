@@ -12,6 +12,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let watchID = null; // ID for geolocation position watcher
 let userMarker; // marker drawn to user location
 let userCircle; // circle drawn around user location representing accuracy
+let currentLocation = null;
 
 // start tracking geolocation
 function startTracking() {
@@ -60,6 +61,8 @@ function success(position) {
     }).addTo(map)
     // set map view to marker
     map.setView([lat, lng]);
+    // update current location variable
+    currentLocation = [lat, lng];
     // print coordinates, accuracy and time
     document.getElementById("geo-text").innerHTML = "lat: " + String(lat) + "<br>lng: " + String(lng) + "<br>accuracy: " + String(+accuracy.toFixed(2)) + " m<br>" + time.toString().split(' (')[0];
 }
@@ -83,9 +86,15 @@ function addMapPoint(lat, lon, rad) {
     return point;
 }
 
-var point1 = addMapPoint(54.826389, 25.355278, 5);
-var point2 = addMapPoint(54.826944, 25.355278, 5);
-var point3 = addMapPoint(54.826667, 25.356111, 5);
+function setMapPoint(point) {
+    if (currentLocation != null) {
+        point.setLatLng(currentLocation)
+    }
+}
+
+var point_blockaus = addMapPoint(54.826708, 25.355745, 5);
+var point_coupole = addMapPoint(54.826417, 25.355439, 5);
+var point_wiederstandsnest = addMapPoint(54.826462, 25.355901, 5);
 
 // print coordinates on click
 var popup = L.popup();
