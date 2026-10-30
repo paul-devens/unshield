@@ -75,10 +75,19 @@ async function startListening() {
         }
         // get user device audio (default input or inputId)
         if (input_id == null) {
-            stream = await navigator.mediaDevices.getUserMedia({audio: true});
+            stream = await navigator.mediaDevices.getUserMedia({
+                audio: {
+                    echoCancellation: false,
+                    noiseSuppression: false,
+                    autoGainControl: false
+                }
+            });
         } else {
             stream = await navigator.mediaDevices.getUserMedia({
                 audio: {
+                    echoCancellation: false,
+                    noiseSuppression: false,
+                    autoGainControl: false,
                     deviceId: {exact: input_id}
                 }
             });
