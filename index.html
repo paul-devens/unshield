@@ -9,9 +9,9 @@
         <!-- Leaflet -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+        <script src="js/ui.js" defer></script>
         <script src="js/audio.js" defer></script>
         <script src="js/location.js" defer></script>
-        <script src="js/ui.js" defer></script>
     </head>
     <body>
         <main>
@@ -33,7 +33,7 @@
                 <input type="button" id="refresh-devices" value="refresh devices" onclick="refreshDevices()">
                 <br>
                 <label for="reverb-select">reverb:</label>
-                <select name="reverbs" id="reverb-select" onchange="reverbChanged()">
+                <select name="reverbs" id="reverb-select" onchange="overrideReverb()">
                     <option value="0">None</option>
                     <option value="1">Blockhaus</option>
                     <option value="2">Coupole</option>
@@ -42,9 +42,9 @@
                 <br>
                 <textarea id="info-text" rows="8"></textarea>
                 <br>
-                <input type="button" id="set-blockhaus" value="set blockhaus" onclick="setMapPoint(point_blockhaus)">
-                <input type="button" id="set-coupole" value="set coupole" onclick="setMapPoint(point_coupole)">
-                <input type="button" id="set-wiederstandsnest" value="set wiederstandsnest" onclick="setMapPoint(point_wiederstandsnest)">
+                <input type="button" id="set-blockhaus" value="set blockhaus" onclick="setMapPoint(pointBlockhaus)">
+                <input type="button" id="set-coupole" value="set coupole" onclick="setMapPoint(pointCoupole)">
+                <input type="button" id="set-wiederstandsnest" value="set wiederstandsnest" onclick="setMapPoint(pointWiederstandsnest)">
             </div>
         </main>
         <footer></footer>

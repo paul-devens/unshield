@@ -158,11 +158,14 @@ function disconnectReverb() {
     }
 }
 
-// handle reverb selector change
-function reverbChanged() {
+// handle reverb changing
+function changeReverb(reverb_id) {
     // get target reverb
-    let reverb_id = document.getElementById("reverb-select").value;
     let target_reverb = reverbs.get(reverb_id);
+    // if target matches current, do nothing
+    if (target_reverb == current_reverb) {
+        return;
+    }
     // handle reverb connection / disconnection
     if (target_reverb == null) {
         disconnectReverb();
@@ -171,4 +174,11 @@ function reverbChanged() {
     }
     // update current_reverb
     current_reverb = target_reverb;
+    appendInfo("reverb set to " + reverb_id);
+}
+
+// handle reverb manual override
+function overrideReverb() {
+    let reverb_id = document.getElementById("reverb-select").value;
+    changeReverb(reverb_id);
 }
