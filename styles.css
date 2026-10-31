@@ -1,6 +1,6 @@
-h1, h2, p, label {
+h1, h2, p, label, button {
     text-align: center;
-    font-family: sans-serif;
+    font-family: Calibri, sans-serif;
     color: lightgray;
 }
 
@@ -16,7 +16,7 @@ textarea {
     margin: 10px;
 }
 
-#options.hidden {
+.hidden {
     display: none;
 }
 
@@ -32,4 +32,18 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
+}
+
+#start-button {
+    font-size: 20px;
+    background-color: black;
+}
+
+#splash {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: grid;
+    place-items: center;
+    background-color: black;
 }

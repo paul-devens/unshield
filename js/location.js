@@ -95,7 +95,7 @@ function success(position) {
     userMarker = L.circleMarker([lat, lng], {
         color: 'black',
         weight: 2,
-        fillCoor: 'white',
+        fillColor: 'white',
         fillOpacity: 1,
         radius: 5
     }).addTo(map);
@@ -194,4 +194,6 @@ function onMapClick(e) { // e = event object
     // currentLocation = e.latlng;
     // checkProximity();
 }
-map.on('click', onMapClick);
+if (testMode) {
+    map.on('click', onMapClick);
+}

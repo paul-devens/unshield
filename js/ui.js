@@ -1,5 +1,14 @@
+let testMode = false;
+
 if (new URLSearchParams(location.search).has('test')) {
     document.getElementById('options')?.classList.remove('hidden');
+    testMode = true;
+}
+
+function startApp() {
+    document.getElementById('splash').remove()
+    startTracking();
+    startListening();
 }
 
 function appendInfo(text) {
