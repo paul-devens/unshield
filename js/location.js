@@ -1,19 +1,50 @@
 // initialize map, set coordinates and zoom level
 var map = L.map('map', {
-    center: [54.826658, 25.355635],
+    center: [54.826533, 25.355641],
     zoom: 17
 });
-// add tile layer
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+// OpenStreetMap tiles
+const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
+});
+// Stadia Alidade Smooth Dark
+const stadia = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=b3cab5bc-de52-47c5-b792-d4f74e178bd2', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+});
+// use OSM as backup if Stadia fails (3 successive tile errors)
+let stadia_fails = 0;
+stadia.on('tileerror', () => {
+    stadia_fails++;
+    if (stadia_fails >= 3) {
+        map.removeLayer(stadia);
+        osm.addTo(map);
+    }
+});
+stadia.on('tileload', () => { stadia_fails = 0; });
+stadia.addTo(map);
 
 let watchID = null; // ID for geolocation position watcher
 let userMarker; // marker drawn to user location
 let userCircle; // circle drawn around user location representing accuracy
 let currentLocation = null;
-const detectionRadius = 5;
+const detectionRadius = 5; // reverb activation range in meters
+// map point styles (inactive and active)
+const pointStyleInactive = {
+    color: 'white',
+    weight: 3,
+    stroke: false,
+    fillOpacity: 0.6,
+    radius: detectionRadius
+}
+const pointStyleActive = {
+    color: 'white',
+    weight: 3,
+    stroke: true,
+    fillOpacity: 0.6,
+    radius: detectionRadius
+}
 
 // start tracking geolocation
 function startTracking() {
@@ -54,12 +85,19 @@ function success(position) {
         map.removeLayer(userCircle);
     }
     // add new marker and circle
-    userMarker = L.marker([lat, lng]).addTo(map);""
     userCircle = L.circle([lat, lng], {
         radius: accuracy,
         color: 'white',
-        fillOpacity: 0.3
-    }).addTo(map)
+        fillOpacity: 0.1,
+        stroke: false
+    }).addTo(map);
+    userMarker = L.circleMarker([lat, lng], {
+        color: 'black',
+        weight: 2,
+        fillCoor: 'white',
+        fillOpacity: 1,
+        radius: 5
+    }).addTo(map);
     // set map view to marker
     map.setView([lat, lng]);
     // update current location variable
@@ -83,11 +121,7 @@ function error(error) {
 // create map point as array [latLng, Circle]
 function addMapPoint(lat, lng) {
     var latlng = L.latLng(lat, lng);
-    var circle = L.circle([lat, lng], {
-        color: 'white',
-        fillOpacity: 0.8,
-        radius: detectionRadius
-    }).addTo(map);
+    var circle = L.circle([lat, lng], pointStyleInactive).addTo(map);
     return [latlng, circle];
 }
 
@@ -102,6 +136,7 @@ function setMapPoint(point) {
 var pointBlockhaus = addMapPoint(54.826708, 25.355745);
 var pointCoupole = addMapPoint(54.826417, 25.355439);
 var pointWiederstandsnest = addMapPoint(54.826462, 25.355901);
+let activePoint = null;
 
 function checkProximity() {
     // get distances to map points
@@ -110,14 +145,42 @@ function checkProximity() {
     var distanceWiederstandsnest = currentLocation.distanceTo(pointWiederstandsnest[0]);
     // set reverb according to distance
     if (distanceBlockhaus < detectionRadius) {
-        changeReverb("1");
+        if (activePoint != pointBlockhaus) {
+            changeReverb("1");
+            setHighlight(pointBlockhaus);
+            activePoint = pointBlockhaus;
+        }
     } else if (distanceCoupole < detectionRadius) {
-        changeReverb("2");
+        if (activePoint != pointCoupole) {
+            changeReverb("2");
+            setHighlight(pointCoupole);
+            activePoint = pointCoupole;
+        }
     } else if (distanceWiederstandsnest < detectionRadius) {
-        changeReverb("3");
+        if (activePoint != pointWiederstandsnest) {
+            changeReverb("3");
+            setHighlight(pointWiederstandsnest);
+            activePoint = pointWiederstandsnest;
+        }
     } else {
-        changeReverb("0"); // reverb off
+        if (activePoint != null) {
+            changeReverb("0"); // reverb off
+            removeHighlights();
+            activePoint = null;
+        }
     }
+}
+
+// highlight active map point
+function setHighlight(point) {
+    removeHighlights();
+    point[1].setStyle(pointStyleActive);
+}
+// remove highlights from all map points
+function removeHighlights() {
+    pointBlockhaus[1].setStyle(pointStyleInactive);
+    pointCoupole[1].setStyle(pointStyleInactive);
+    pointWiederstandsnest[1].setStyle(pointStyleInactive);
 }
 
 // print coordinates on click
