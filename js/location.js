@@ -100,7 +100,8 @@ function success(position) {
         radius: 5
     }).addTo(map);
     // set map view to marker
-    map.setView([lat, lng]);
+    // map.setView([lat, lng]);
+    scaleMap([lat, lng], [54.826525, 25.355664]);
     // update current location variable
     currentLocation = L.latLng(lat, lng);
     // check proximity to map points
@@ -117,6 +118,11 @@ function error(error) {
     //     document.getElementById("geo-text").innerHTML = "cannot get location";
     // }
     document.getElementById("geo-text").innerHTML = error.code.toString() + " : " + error.message;
+}
+
+function scaleMap(coord1, coord2) {
+    const bounds = L.latLngBounds(coord1, coord2);
+    map.fitBounds(bounds, { padding: [50, 50], maxZoom: 19 });
 }
 
 // create map point as array [latLng, Circle]
