@@ -1,7 +1,8 @@
 // initialize map, set coordinates and zoom level
 var map = L.map('map', {
     center: [54.826533, 25.355641],
-    zoom: 17
+    zoom: 17,
+    zoomControl: false
 });
 // OpenStreetMap tiles
 const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
