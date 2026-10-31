@@ -122,7 +122,7 @@ function error(error) {
 
 function scaleMap(coord1, coord2) {
     const bounds = L.latLngBounds(coord1, coord2);
-    map.fitBounds(bounds, { padding: [50, 50], maxZoom: 19 });
+    map.fitBounds(bounds, { padding: [30, 30], maxZoom: 19 });
 }
 
 // create map point as array [latLng, Circle]
