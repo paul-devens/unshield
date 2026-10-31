@@ -30,7 +30,7 @@ let watchID = null; // ID for geolocation position watcher
 let userMarker; // marker drawn to user location
 let userCircle; // circle drawn around user location representing accuracy
 let currentLocation = null;
-const detectionRadius = 5; // reverb activation range in meters
+const detectionRadius = 8; // reverb activation range in meters
 // map point styles (inactive and active)
 const pointStyleInactive = {
     color: 'white',
@@ -140,9 +140,9 @@ function setMapPoint(point) {
     }
 }
 
-var pointBlockhaus = addMapPoint(54.826708, 25.355745);
-var pointCoupole = addMapPoint(54.826417, 25.355439);
-var pointWiederstandsnest = addMapPoint(54.826462, 25.355901);
+var pointBlockhaus = addMapPoint(54.826688, 25.355751);
+var pointCoupole = addMapPoint(54.826413, 25.355404);
+var pointWiederstandsnest = addMapPoint(54.826459, 25.355837);
 let activePoint = null;
 
 function checkProximity() {
