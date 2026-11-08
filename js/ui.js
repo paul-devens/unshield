@@ -1,9 +1,26 @@
 let testMode = false;
 
 if (new URLSearchParams(location.search).has('test')) {
-    document.getElementById('options')?.classList.remove('hidden');
+    document.getElementById('tab-options')?.classList.remove('hidden');
     testMode = true;
 }
+
+const tabs = document.querySelectorAll('.tab');
+const panels = document.querySelectorAll('.panel');
+const mapDiv = document.getElementById('map');
+
+tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        const panel = document.getElementById(tab.dataset.panel);
+        panel.classList.add('active');
+        if (panel.contains(mapDiv)) {
+            map.invalidateSize();
+        }
+    });
+});
 
 function startApp() {
     document.getElementById('splash').remove()

@@ -18,28 +18,42 @@
             <div id="splash">
                 <div>
                     <p>Paul Devens</p>
-                    <h1>un/shield</h1>
+                    <h1>Un/shield</h1>
                 </div>
-                <button id="start-button" onclick="startApp()">start</button>
+                <button id="start-button" onclick="startApp()">Start</button>
             </div>
-            <div id="map"></div>
-            <div id="colophon-div">
+            <div class="tab-bar">
+                <button class="tab active" data-panel="panel-map">Map</button>
+                <button class="tab" data-panel="panel-colophon">Colophon</button>
+                <!-- <button class="tab" data-panel="panel-help">Help</button> -->
+                <button class="tab hidden" data-panel="panel-options" id="tab-options">Options</button>
+            </div>
+            <div class="panel active" id="panel-map">
+                <div id="map"></div>
+            </div>
+            <div class="panel" id="panel-colophon">
+                <!-- <label for="language-select">Language:</label>
+                <select>
+                    <option>LT</option>
+                    <option>EN</option>
+                    <option>NL</option>
+                </select> -->
                 <embed id="colophon-txt" src="colophon.txt">
             </div>
-            <div id="options" class="hidden">
-                <p id="geo-text">tracking disabled</p>
-                <input type="button" id="geo-enable" value="enable tracking" onclick="startTracking()">
-                <input type="button" id="geo-disable" value="disable tracking" onclick="stopTracking()" disabled>
+            <!-- <div class="panel" id="panel-help"></div> -->
+            <div class="panel" id="panel-options">
+                <button id="geo-enable" onclick="startTracking()">enable tracking</button>
+                <button id="geo-disable" onclick="stopTracking()" disabled>disable tracking</button>
                 <br>
-                <input type="button" id="audio-enable" value="enable listening" onclick="startListening()">
-                <input type="button" id="audio-disable" value="disable listening" onclick="stopListening()" disabled>
+                <button id="audio-enable" onclick="startListening()">enable listening</button>
+                <button id="audio-disable" onclick="stopListening()" disabled>disable listening</button>
                 <br>
                 <label for="input-select">input:</label>
                 <select name="inputs" id="input-select" onchange="inputChanged()">
                     <option value="">Default</option>
                 </select>
                 <br>
-                <input type="button" id="refresh-devices" value="refresh devices" onclick="refreshDevices()">
+                <button id="refresh-devices" onclick="refreshDevices()">refresh devices</button>
                 <br>
                 <label for="reverb-select">reverb:</label>
                 <select name="reverbs" id="reverb-select" onchange="overrideReverb()">
@@ -49,11 +63,13 @@
                     <option value="3">Wiederstandsnest</option>
                 </select>
                 <br>
+                <button id="set-blockhaus" onclick="setMapPoint(pointBlockhaus)">set blockhaus</button>
+                <button id="set-coupole" onclick="setMapPoint(pointCoupole)">set coupole</button>
+                <button id="set-wiederstandsnest" onclick="setMapPoint(pointWiederstandsnest)">set wiederstandsnest</button>
+                <br>
                 <textarea id="info-text" rows="8"></textarea>
                 <br>
-                <input type="button" id="set-blockhaus" value="set blockhaus" onclick="setMapPoint(pointBlockhaus)">
-                <input type="button" id="set-coupole" value="set coupole" onclick="setMapPoint(pointCoupole)">
-                <input type="button" id="set-wiederstandsnest" value="set wiederstandsnest" onclick="setMapPoint(pointWiederstandsnest)">
+                <p id="geo-text">tracking disabled</p>
             </div>
         </main>
         <footer></footer>
