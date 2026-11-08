@@ -10,12 +10,13 @@ Un/shield tyrinėja priešpriešą tarp pažeidžiamumo ir saugumo troškimo. Š
 
 Normandijos ir Bretanės pakrantėse išmatuoti bunkeriai: Pasipriešinimo lizdas 33A (Widerstandsnest 33A), R666 bunkeris su šarvuotu kupolu (R666 Coupole) ir „Kepurės“ bunkeris (Blockhaus de la Casquette). 
 
-Un/shield („Ne/apsaugotas“) – tai Paul Devens meno projektas, sukurtas Europos Parkui, Europos centro muziejui kaip parodos „Parko garsas“ dalis.
+Un/shield („Ne/apsaugotas“) – tai Paul Devens meno projektas,
+sukurtas Europos Parkui, Europos centro muziejui kaip parodos „Parko garsas“ dalis.
 Konstrukcijas pagamino – Bert Reijnen
 Programėlę sukūrė – Miikka Lehto
 
 Projektą finansavo:
-Lietuvos kultūros taryba, Lietuva 
+Lietuvos kultūros taryba, Lietuva
 Mondriaan fondas, Nyderlandai
 Zuydo taikomųjų mokslų universitetas, Nyderlandai
 
@@ -38,7 +39,7 @@ App development: Miikka Lehto
 
 With financial support of:
 Mondriaan Fund, Netherlands
-Lithuanian Council for Culture, Lithuania  
+Lithuanian Council for Culture, Lithuania
 Zuyd University of Applied Sciences, Netherlands
 
 NL
