@@ -4,10 +4,10 @@ h1, h2, p, label, button, select, li {
 }
 
 textarea {
-    width: 80%;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    width: 90%;
     font-family: 'Courier New', monospace;
+    color: lightgray;
+    background-color: black;
 }
 
 .hidden {
@@ -80,7 +80,14 @@ select {
 }
 
 #panel-options {
+    max-height: 80dvh;
+    overflow-y: auto;
     text-align: center;
+}
+
+#panel-options > * {
+    margin-bottom: 8px;
+    max-width: 100%;
 }
 
 #panel-colophon {

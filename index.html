@@ -57,31 +57,39 @@
             </div>
             <!-- <div class="panel" id="panel-help"></div> -->
             <div class="panel" id="panel-options">
-                <button id="geo-enable" onclick="startTracking()">enable tracking</button>
-                <button id="geo-disable" onclick="stopTracking()" disabled>disable tracking</button>
+                <h2>Location</h2>
+                <button id="geo-enable" onclick="startTracking()">Enable</button>
+                <button id="geo-disable" onclick="stopTracking()" disabled>Disable</button>
                 <br>
-                <button id="audio-enable" onclick="startListening()">enable listening</button>
-                <button id="audio-disable" onclick="stopListening()" disabled>disable listening</button>
+                <label for="map-view-select">Map view:</label>
+                <select name="map view" id="map-view-select">
+                    <option value="bounds">Bounds</option>
+                    <option value="location">Location</option>
+                    <option value="free">Free</option>
+                </select>
                 <br>
-                <label for="input-select">input:</label>
+                <button id="set-blockhaus" onclick="setMapPoint(pointBlockhaus)">Set Blockhaus</button>
+                <button id="set-coupole" onclick="setMapPoint(pointCoupole)">Set Coupole</button>
+                <button id="set-wiederstandsnest" onclick="setMapPoint(pointWiederstandsnest)">Set Wiederstandsnest</button>
+                <h2>Audio</h2>
+                <button id="audio-enable" onclick="startListening()">Enable</button>
+                <button id="audio-disable" onclick="stopListening()" disabled>Disable</button>
+                <br>
+                <label for="input-select">Input:</label>
                 <select name="inputs" id="input-select" onchange="inputChanged()">
                     <option value="">Default</option>
                 </select>
                 <br>
-                <button id="refresh-devices" onclick="refreshDevices()">refresh devices</button>
+                <button id="refresh-devices" onclick="refreshDevices()">Refresh inputs</button>
                 <br>
-                <label for="reverb-select">reverb:</label>
+                <label for="reverb-select">Reverb:</label>
                 <select name="reverbs" id="reverb-select" onchange="overrideReverb()">
                     <option value="0">None</option>
                     <option value="1">Blockhaus</option>
                     <option value="2">Coupole</option>
                     <option value="3">Wiederstandsnest</option>
                 </select>
-                <br>
-                <button id="set-blockhaus" onclick="setMapPoint(pointBlockhaus)">set blockhaus</button>
-                <button id="set-coupole" onclick="setMapPoint(pointCoupole)">set coupole</button>
-                <button id="set-wiederstandsnest" onclick="setMapPoint(pointWiederstandsnest)">set wiederstandsnest</button>
-                <br>
+                <h2>Info</h2>
                 <textarea id="info-text" rows="8"></textarea>
                 <br>
                 <p id="geo-text">tracking disabled</p>

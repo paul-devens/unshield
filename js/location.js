@@ -47,6 +47,15 @@ const pointStyleActive = {
     radius: detectionRadius
 }
 
+let mapView = "bounds";
+const mapViewSelect = document.getElementById("map-view-select");
+mapViewSelect.addEventListener("change", () => mapView = mapViewSelect.value);
+
+if (testMode) {
+    mapView = "location";
+    mapViewSelect.value = "location";
+}
+
 // start tracking geolocation
 function startTracking() {
     if (watchID != null) {
@@ -99,9 +108,12 @@ function success(position) {
         fillOpacity: 1,
         radius: 5
     }).addTo(map);
-    // set map view to marker
-    // map.setView([lat, lng]);
-    scaleMap([lat, lng], [54.826525, 25.355664]);
+    // set map view according to selection
+    if (mapView == "bounds") {
+        scaleMap([lat, lng], [54.826525, 25.355664]);
+    } else if (mapView == "location") {
+        map.setView([lat, lng]);
+    }
     // update current location variable
     currentLocation = L.latLng(lat, lng);
     // check proximity to map points
