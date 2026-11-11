@@ -56,6 +56,24 @@ if (testMode) {
     mapViewSelect.value = "location";
 }
 
+function initUserMarkers() {
+    // circle showing accuracy
+    userCircle = L.circle([0, 0], {
+        radius: 0,
+        color: 'white',
+        fillOpacity: 0.1,
+        stroke: false
+    }).addTo(map);
+    // user marker showing location
+    userMarker = L.circleMarker([0, 0], {
+        color: 'black',
+        weight: 2,
+        fillColor: 'white',
+        fillOpacity: 1,
+        radius: 5
+    }).addTo(map);
+}
+
 // start tracking geolocation
 function startTracking() {
     if (watchID != null) {
@@ -75,10 +93,12 @@ function stopTracking() {
     document.getElementById("geo-text").innerHTML = "tracking disabled";
     document.getElementById("geo-enable").disabled = false; // enable start button
     document.getElementById("geo-disable").disabled = true; // disable stop button
-    // if marker exists, remove it
+    // if markers exists, remove them
     if (userMarker) {
         map.removeLayer(userMarker);
         map.removeLayer(userCircle);
+        userMarker = null;
+        userCircle = null;
     }
 }
 
@@ -89,25 +109,12 @@ function success(position) {
     const accuracy = position.coords.accuracy;
     const timestamp = position.timestamp;
     const time = new Date(timestamp);
-    // if marker already exists, remove it
-    if (userMarker) {
-        map.removeLayer(userMarker);
-        map.removeLayer(userCircle);
-    }
-    // add new marker and circle
-    userCircle = L.circle([lat, lng], {
-        radius: accuracy,
-        color: 'white',
-        fillOpacity: 0.1,
-        stroke: false
-    }).addTo(map);
-    userMarker = L.circleMarker([lat, lng], {
-        color: 'black',
-        weight: 2,
-        fillColor: 'white',
-        fillOpacity: 1,
-        radius: 5
-    }).addTo(map);
+    // init markers if they don't exist
+    if (!userMarker) initUserMarkers();
+    // update marker positions and accuracy radius
+    userMarker.setLatLng([lat, lng]);
+    userCircle.setLatLng([lat, lng]);
+    userCircle.setRadius(accuracy);
     // set map view according to selection
     if (mapView == "bounds") {
         scaleMap([lat, lng], [54.826525, 25.355664]);
