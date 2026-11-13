@@ -101,3 +101,30 @@ ul {
     list-style: none;
     padding: 0;
 }
+
+.user-marker { background: transparent; border: none; }
+
+.user-marker .arrow {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 28px; height: 28px;
+  margin: -14px 0 0 -14px;
+  background: #ffffff;
+  clip-path: polygon(27% 50%, 50% 0%, 73% 50%);
+  transform-origin: center;
+  opacity: 0;
+  transition: transform .2s linear;
+  z-index: 1;
+}
+
+.user-marker .dot {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 14px; height: 14px;
+  margin: -7px 0 0 -7px;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 50%;
+  z-index: 2;
+}

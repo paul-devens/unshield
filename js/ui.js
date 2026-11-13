@@ -87,6 +87,7 @@ setLang(langSelect.value);
 function startApp() {
     document.getElementById('splash').remove()
     startTracking();
+    startCompass();
     startListening();
 }
 

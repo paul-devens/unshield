@@ -64,15 +64,60 @@ function initUserMarkers() {
         fillOpacity: 0.1,
         stroke: false
     }).addTo(map);
-    // user marker showing location
-    userMarker = L.circleMarker([0, 0], {
-        color: 'black',
-        weight: 2,
-        fillColor: 'white',
-        fillOpacity: 1,
-        radius: 5
+    // user marker showing location and heading
+    userMarker = L.marker([0, 0], {
+        icon: L.divIcon({
+            className: 'user-marker',
+            html:  `<div class="arrow"></div>
+                    <div class="dot"></div>`,
+            // html:   `<svg class="arrow" viewBox="0 0 24 24" width="24" height="24">
+            //             <path d="M12 0 L20 22 L12 17 L4 22 Z" fill="rgb(255, 255, 255)"/>
+            //         </svg>
+            //         <div class="dot"></div>`,
+            iconSize: [0, 0],
+            iconAnchor: [0, 0]
+        })
     }).addTo(map);
 }
+
+let targetHeading = null; // latest heading sensor reading
+let shownHeading = 0; // currently shown heading applied as rotation to arrow
+
+async function startCompass() {
+    // iOS requires permission
+    if (typeof window.DeviceOrientationEvent?.requestPermission === 'function') {
+        const res = await window.DeviceOrientationEvent.requestPermission();
+        if (res !== 'granted') return;
+    }
+    window.addEventListener('deviceorientationabsolute', handleOrientation);
+    window.addEventListener('deviceorientation', handleOrientation);
+}
+
+// update targetHeading value
+function handleOrientation(e) {
+    let heading = null;
+    if (e.webkitCompassHeading != null) {
+        heading = e.webkitCompassHeading; // iOS, true north, clockwise
+    } else if (e.absolute && e.alpha != null) {
+        heading = 360 - e.alpha; // absolute event, converted to clockwise
+    }
+    if (heading != null) targetHeading = heading;
+}
+
+// update arrow rotation at 10 Hz
+setInterval(() => {
+    if (targetHeading == null) return;
+    // rotate the shortest way
+    while (shownHeading - targetHeading > 180) targetHeading += 360;
+    while (targetHeading - shownHeading > 180) targetHeading -= 360;
+    shownHeading = targetHeading;
+    // set rotation to arrow if it exists
+    const arrow = userMarker?.getElement()?.querySelector('.arrow');
+    if (arrow) {
+        arrow.style.opacity = '1';
+        arrow.style.transform = `rotate(${shownHeading}deg)`;
+    }
+}, 100);
 
 // start tracking geolocation
 function startTracking() {
@@ -80,7 +125,7 @@ function startTracking() {
         document.getElementById("geo-text").innerHTML = "tracking already enabled";
     } else {
         document.getElementById("geo-text").innerHTML = "tracking enabled";
-        watchID = navigator.geolocation.watchPosition(success, error, {enableHighAccuracy: true});
+        watchID = navigator.geolocation.watchPosition(geoSuccess, geoError, {enableHighAccuracy: true});
         document.getElementById("geo-disable").disabled = false; // enable stop button
         document.getElementById("geo-enable").disabled = true; // disable start button
     }
@@ -88,7 +133,7 @@ function startTracking() {
 
 // stop tracking geolocation
 function stopTracking() {
-    navigator.geolocation.clearWatch(watchID)
+    navigator.geolocation.clearWatch(watchID);
     watchID = null;
     document.getElementById("geo-text").innerHTML = "tracking disabled";
     document.getElementById("geo-enable").disabled = false; // enable start button
@@ -103,7 +148,7 @@ function stopTracking() {
 }
 
 // launched when position is fetched successfully
-function success(position) {
+function geoSuccess(position) {
     const lat = position.coords.latitude;
     const lng = position.coords.longitude;
     const accuracy = position.coords.accuracy;
@@ -130,7 +175,7 @@ function success(position) {
 }
 
 // launched when position cannot be fetched
-function error(error) {
+function geoError(error) {
     // if (error.code === 1) {
     //     document.getElementById("geo-text").innerHTML = "please allow geolocation access";
     // } else {
